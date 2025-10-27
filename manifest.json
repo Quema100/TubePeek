@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "TubePeek",
+    "description": "extensions by Quema",
+    "version": "0.1",
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "watch.js"
+            ],
+            "matches": [
+                "https://www.youtube.com/*"
+            ]
+        }
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.youtube.com/*"
+            ],
+            "js": [
+                "main.js"
+            ]
+        }
+    ]
+}
