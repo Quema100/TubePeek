@@ -7,9 +7,9 @@ const Watchinfo = () => {
     const createDiv = document.createElement('div');
     createDiv.id = 'watchinfo-div';
     createDiv.style.display = 'flex';
-    createDiv.style.flexDirection = 'row';
+    createDiv.style.flexDirection = 'column';
     createDiv.style.alignItems = 'center';
-    createDiv.style.justifyContent = 'center';
+    createDiv.style.justifyContent = 'flex-start'; // 'center'; 임시 조치
     createDiv.style.width = '100%';
     createDiv.style.height = '100px';
     createDiv.style.backgroundColor = '#272727';
@@ -17,6 +17,15 @@ const Watchinfo = () => {
     createDiv.style.borderRadius = '8px';
 
     createDiv.style.transition = 'height 0.3s ease-in-out';
+
+    const headerDiv = document.createElement('div');
+    headerDiv.style.width = '100%';
+    headerDiv.style.height = '100px';
+    headerDiv.style.display = 'flex';
+    headerDiv.style.flexDirection = 'row';
+    headerDiv.style.alignItems = 'center';
+    headerDiv.style.justifyContent = 'center';
+
 
     const span = document.createElement('span');
     span.textContent = document.querySelector('h1.title yt-formatted-string') == (undefined || null) ?
@@ -32,8 +41,8 @@ const Watchinfo = () => {
     span.style.flexDirection = 'column';
     span.style.justifyContent = 'center';
     span.style.alignItems = 'center';
-    span.style.fontSize = '12px';
-    span.style.margin = '0 10px 0 40px';
+    span.style.fontSize = '13px';
+    span.style.margin = '0 10px 0 20px';
 
 
     const infoButtonDiv = document.createElement('div');
@@ -53,7 +62,8 @@ const Watchinfo = () => {
     infoButton.style.border = 'none';
     infoButton.style.cursor = 'pointer';
 
-    const infoStyle = document.createElement('style')
+    const infoStyle = document.createElement('style');
+    infoStyle.id = 'infoStyle';
     infoStyle.textContent = `
         #infoButton:before {
             position: absolute;
@@ -77,17 +87,36 @@ const Watchinfo = () => {
         }
     `;
 
+    const videoInfoDiv = document.createElement('div');
+    videoInfoDiv.id = 'videoInfoDiv';
+    videoInfoDiv.style.width = '100%';
+    videoInfoDiv.innerText = 'test div';
+    videoInfoDiv.style.color = '#FFFF';
+
+    videoInfoDiv.style.transition = 'height 0.3s ease-in-out';
+
     infoButton.onclick = () => {
         const isOpening = infoButton.classList.toggle('is-toggled');
         if (isOpening) {
             createDiv.style.height = '500px';
+            setTimeout(() => {
+                if (document.getElementById('watchinfo-div').offsetHeight >= 110) {
+                    createDiv.appendChild(videoInfoDiv);
+                    videoInfoDiv.style.height = '400px'
+                };
+            }, 100)
         } else {
             createDiv.style.height = '100px';
+            setTimeout(() => {
+                if (document.getElementById('watchinfo-div').offsetHeight <= 110) document.getElementById('videoInfoDiv').remove();
+            }, 290)
         }
     };
+
     document.head.appendChild(infoStyle);
-    createDiv.appendChild(span);
-    createDiv.appendChild(infoButtonDiv);
+    createDiv.appendChild(headerDiv);
+    headerDiv.appendChild(span);
+    headerDiv.appendChild(infoButtonDiv);
     infoButtonDiv.appendChild(infoButton)
 
     if (secondary) {
@@ -98,10 +127,12 @@ const Watchinfo = () => {
 }
 
 const removeWatchinfo = () => {
+    const style = document.getElementById('infoStyle');
     const div = document.getElementById('watchinfo-div');
-    if (div) {
+    if (div && style) {
+        style.remove();
         div.remove();
-        console.log('watchinfo-div removed.');
+        console.log('watchinfo-div and infoStyle removed.');
     }
 };
 
