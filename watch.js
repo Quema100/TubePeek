@@ -14,6 +14,9 @@ const getYouTubeVideoInfo = () => {
 
                 try {
                     const playerResponse = JSON.parse(jsonString[1]);
+
+                    if (playerResponse.videoDetails?.author.includes('- Topic')) return;
+
                     const channelId = playerResponse.videoDetails?.channelId;
                     if (!channelId) {
                         console.error('Unable to retrieve channel ID.');
@@ -66,13 +69,13 @@ const getChannelLatestVideos = (videosUrl) => {
                     const ytInitialData = JSON.parse(dataMatch[1]);
                     console.log(ytInitialData)
                     const channelPFP = ytInitialData.header?.pageHeaderRenderer.content
-                    ?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image
-                    ?.sources[ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources.length - 1].url;
+                        ?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image
+                        ?.sources[ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources.length - 1].url;
                     const channelName = ytInitialData.metadata?.channelMetadataRenderer.title;
                     const channelUrl = ytInitialData.metadata?.channelMetadataRenderer.vanityChannelUrl;
                     const subscriberCount = ytInitialData.header?.pageHeaderRenderer.content
-                    ?.pageHeaderViewModel?.metadata?.contentMetadataViewModel
-                    ?.metadataRows[1]?.metadataParts[0]?.accessibilityLabel || 'Unknown Subscribers';
+                        ?.pageHeaderViewModel?.metadata?.contentMetadataViewModel
+                        ?.metadataRows[1]?.metadataParts[0]?.accessibilityLabel || document.querySelector('#owner-sub-count')?.innerText?.trim() || 'Unknown Subscribers';
                     const tabs = ytInitialData.contents?.twoColumnBrowseResultsRenderer?.tabs
                         || ytInitialData.contents?.singleColumnBrowseResultsRenderer?.tabs;
                     if (!tabs) {
