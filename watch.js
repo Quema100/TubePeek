@@ -64,10 +64,15 @@ const getChannelLatestVideos = (videosUrl) => {
 
                 try {
                     const ytInitialData = JSON.parse(dataMatch[1]);
-                    const channelPFP = ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources[ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources.length - 1].url;
+                    console.log(ytInitialData)
+                    const channelPFP = ytInitialData.header?.pageHeaderRenderer.content
+                    ?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image
+                    ?.sources[ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources.length - 1].url;
                     const channelName = ytInitialData.metadata?.channelMetadataRenderer.title;
                     const channelUrl = ytInitialData.metadata?.channelMetadataRenderer.vanityChannelUrl;
-                    const subscriberCount = ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.metadata?.contentMetadataViewModel.metadataRows[1].metadataParts[0].text.content;
+                    const subscriberCount = ytInitialData.header?.pageHeaderRenderer.content
+                    ?.pageHeaderViewModel?.metadata?.contentMetadataViewModel
+                    ?.metadataRows[1]?.metadataParts[0]?.accessibilityLabel || 'Unknown Subscribers';
                     const tabs = ytInitialData.contents?.twoColumnBrowseResultsRenderer?.tabs
                         || ytInitialData.contents?.singleColumnBrowseResultsRenderer?.tabs;
                     if (!tabs) {
