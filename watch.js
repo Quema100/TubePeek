@@ -15,6 +15,8 @@ const getYouTubeVideoInfo = () => {
                 try {
                     const playerResponse = JSON.parse(jsonString[1]);
 
+                    console.log(playerResponse)
+
                     if (playerResponse.videoDetails?.author.includes('- Topic')) return;
 
                     const channelId = playerResponse.videoDetails?.channelId;
@@ -260,36 +262,63 @@ const Watchinfo = async () => {
         const infoStyle = document.createElement('style');
         infoStyle.id = 'infoStyle';
         infoStyle.textContent = `
-        #infoButton:before {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            content: '';
-            width: 10px; 
-            height: 10px; 
-            border-top: 2.5px solid #aaa; 
-            border-right: 2.5px solid #aaa; 
-            transform: translate(-50%, -50%) rotate(135deg);
-            transition: all 0.2s ease-in-out;
-        }
+            #infoButton:before {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                content: '';
+                width: 10px; 
+                height: 10px; 
+                border-top: 2.5px solid #aaa; 
+                border-right: 2.5px solid #aaa; 
+                transform: translate(-50%, -50%) rotate(135deg);
+                transition: all 0.2s ease-in-out;
+            }
 
-        #infoButton:hover:before {
-            border-color: #f1f1f1;
-        }
+            #infoButton:hover:before {
+                border-color: #f1f1f1;
+            }
 
-        #infoButton.is-toggled:before {
-            transform: translate(-50%, -50%) rotate(-45deg); 
-        }
-    `;
+            #infoButton.is-toggled:before {
+                transform: translate(-50%, -50%) rotate(-45deg); 
+            }
+        `;
 
-        const videoInfoDiv = document.createElement('div');
-        videoInfoDiv.id = 'videoInfoDiv';
-        videoInfoDiv.style.width = '100%';
-        videoInfoDiv.style.height = '400px'
-        videoInfoDiv.style.display = 'flex';
-        videoInfoDiv.style.flexDirection = 'column';
-        videoInfoDiv.style.justifyContent = 'flex-start';
-        videoInfoDiv.style.alignItems = 'center';
+        const NowVideoInfoDiv = document.createElement('div');
+        NowVideoInfoDiv.id = 'NowVideoInfoDiv';
+        NowVideoInfoDiv.style.width = '100%';
+        NowVideoInfoDiv.style.height = '80px';
+        NowVideoInfoDiv.style.margin = '10px 0';
+
+        const LatestVideoInfoDiv = document.createElement('div');
+        LatestVideoInfoDiv.id = 'LatestVideoInfoDiv';
+        LatestVideoInfoDiv.style.width = '100%';
+        LatestVideoInfoDiv.style.height = '280px'
+        LatestVideoInfoDiv.style.display = 'flex';
+        LatestVideoInfoDiv.style.flexDirection = 'column';
+        LatestVideoInfoDiv.style.justifyContent = 'flex-start';
+        LatestVideoInfoDiv.style.alignItems = 'center';
+        LatestVideoInfoDiv.style.margin = '10px 0';
+        LatestVideoInfoDiv.style.overflowY = 'scroll';
+
+        for (i = 0; i < LatestVideoList.length; i++) {
+            const LatestVideo = document.createElement('div');
+            LatestVideo.style.width = '90%';
+            LatestVideo.style.height = '100px';
+            LatestVideo.style.margin = '10px 20px';
+            LatestVideo.style.display = 'flex';
+            LatestVideo.style.flexDirection = 'row';
+            LatestVideo.style.alignItems = 'center';
+            LatestVideo.style.justifyContent = 'flex-start';
+
+            const videoThumbnail = document.createElement('img');
+            videoThumbnail.src = LatestVideoList[i].videoThumbnail;
+            videoThumbnail.style.width = 'auto';
+            videoThumbnail.style.height = '80px';
+            videoThumbnail.style.borderRadius = '12px';
+            LatestVideoInfoDiv.appendChild(LatestVideo);
+            LatestVideo.appendChild(videoThumbnail);
+        }
 
         channelinfoDiv.onclick = () => window.location.href = channelUrl;
 
@@ -301,14 +330,16 @@ const Watchinfo = async () => {
                 setTimeout(() => headerDiv.style.borderRadius = '12px 12px 0 0', 100)
                 setTimeout(() => {
                     if (document.getElementById('watchinfo-div').offsetHeight >= 110) {
-                        createDiv.appendChild(videoInfoDiv);
+                        createDiv.appendChild(NowVideoInfoDiv);
+                        createDiv.appendChild(LatestVideoInfoDiv);
                     };
                 }, 250)
             } else {
                 createDiv.style.height = '100px';
                 setTimeout(() => {
                     if (document.getElementById('watchinfo-div').offsetHeight <= 130) {
-                        document.getElementById('videoInfoDiv').remove();
+                        document.getElementById('LatestVideoInfoDiv').remove();
+                        document.getElementById('NowVideoInfoDiv').remove();
                         headerDiv.style.borderRadius = '12px';
                     }
                 }, 280)
