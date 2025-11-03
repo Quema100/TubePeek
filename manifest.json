@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "TubePeek",
     "description": "extensions by Quema",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "icons": {
         "16": "src/img/TubePeek.png",
         "48": "src/img/TubePeek.png",
