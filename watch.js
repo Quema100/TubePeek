@@ -204,7 +204,7 @@ const Watchinfo = async () => {
         TitleA.style.color = colors.text;
         TitleA.style.width = '100%';
         TitleA.style.height = '50px';
-        TitleA.style.fontSize = '15px';
+        TitleA.style.fontSize = '14.5px';
         TitleA.style.display = 'flex';
         TitleA.style.alignItems = 'center';
 
