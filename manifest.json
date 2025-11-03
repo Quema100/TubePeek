@@ -3,6 +3,11 @@
     "name": "TubePeek",
     "description": "extensions by Quema",
     "version": "1.0.0",
+    "icons": {
+        "16": "img/TubePeek.png",
+        "48": "img/TubePeek.png",
+        "128": "img/TubePeek.png"
+    },
     "web_accessible_resources": [
         {
             "resources": [

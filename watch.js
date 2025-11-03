@@ -139,6 +139,18 @@ const Watchinfo = async () => {
     console.log('Watchinfo function executed');
     if (document.getElementById('watchinfo-div')) return;
 
+    const isDarkMode = document.documentElement.hasAttribute('dark')
+        || document.querySelector('ytd-app')?.hasAttribute('dark');
+
+    const colors = {
+        bg: isDarkMode ? '#1f1f1f' : '#f9f9f9',
+        header: isDarkMode ? '#272727' : '#f1f1f1',
+        text: isDarkMode ? '#f1f1f1' : '#121212',
+        subText: isDarkMode ? '#ffffff96' : '#555',
+        hoverArrow: isDarkMode ? '#f1f1f1' : '#121212',
+        arrow: isDarkMode ? '#aaa' : '#555'
+    };
+
     const secondary = document.querySelector('[id="secondary"][class="style-scope ytd-watch-flexy"]');
 
     const createDiv = document.createElement('div');
@@ -149,7 +161,7 @@ const Watchinfo = async () => {
     createDiv.style.justifyContent = 'flex-start';
     createDiv.style.width = '100%';
     createDiv.style.height = '100px';
-    createDiv.style.backgroundColor = '#1f1f1fff';
+    createDiv.style.backgroundColor = colors.bg;
     createDiv.style.margin = '10px 0 20px 0';
     createDiv.style.borderRadius = '12px';
 
@@ -162,7 +174,7 @@ const Watchinfo = async () => {
     headerDiv.style.flexDirection = 'row';
     headerDiv.style.alignItems = 'center';
     headerDiv.style.justifyContent = 'center';
-    headerDiv.style.backgroundColor = '#272727';
+    headerDiv.style.backgroundColor = colors.header;
     headerDiv.style.borderRadius = '12px';
 
 
@@ -189,10 +201,10 @@ const Watchinfo = async () => {
                 NowVideo.slice(0, 23) + '...' :
                 NowVideo;
 
-        TitleA.style.color = '#f1f1f1';
+        TitleA.style.color = colors.text;
         TitleA.style.width = '100%';
         TitleA.style.height = '50px';
-        TitleA.style.fontSize = '13px';
+        TitleA.style.fontSize = '15px';
         TitleA.style.display = 'flex';
         TitleA.style.alignItems = 'center';
 
@@ -229,7 +241,7 @@ const Watchinfo = async () => {
         channel_Name.innerText = channelName;
         channel_Name.style.width = '100%';
         channel_Name.style.height = '25px';
-        channel_Name.style.color = '#FFFF'
+        channel_Name.style.color = colors.text;
         channel_Name.style.fontSize = '11px';
         channel_Name.style.display = 'flex';
         channel_Name.style.alignItems = 'center';
@@ -238,7 +250,7 @@ const Watchinfo = async () => {
         channelSub.innerText = subscriberCount;
         channelSub.style.width = '100%';
         channelSub.style.height = '25px';
-        channelSub.style.color = '#ffffff96';
+        channelSub.style.color = colors.subText;
         channelSub.style.fontSize = '9px';
 
         const infoButtonDiv = document.createElement('div');
@@ -269,14 +281,14 @@ const Watchinfo = async () => {
                 content: '';
                 width: 10px; 
                 height: 10px; 
-                border-top: 2.5px solid #aaa; 
-                border-right: 2.5px solid #aaa; 
+                border-top: 2.5px solid ${colors.arrow}; 
+                border-right: 2.5px solid ${colors.arrow}; 
                 transform: translate(-50%, -50%) rotate(135deg);
                 transition: all 0.2s ease-in-out;
             }
 
             #infoButton:hover:before {
-                border-color: #f1f1f1;
+                border-color: ${colors.hoverArrow};
             }
 
             #infoButton.is-toggled:before {
@@ -284,24 +296,31 @@ const Watchinfo = async () => {
             }
         `;
 
-        const NowVideoInfoDiv = document.createElement('div');
-        NowVideoInfoDiv.id = 'NowVideoInfoDiv';
-        NowVideoInfoDiv.style.width = '100%';
-        NowVideoInfoDiv.style.height = '80px';
-        NowVideoInfoDiv.style.margin = '10px 0';
+        const LatestDivTitle = document.createElement('a');
+        LatestDivTitle.id = 'LatestDivTitle';
+        LatestDivTitle.style.width = '90%';
+        LatestDivTitle.style.height = '20px';
+        LatestDivTitle.innerText = 'LatestVideos';
+        LatestDivTitle.style.display = 'flex';
+        LatestDivTitle.style.justifyContent = 'flex-start';
+        LatestDivTitle.style.alignItems = 'center';
+        LatestDivTitle.style.fontSize = '15px';
+        LatestDivTitle.style.color = colors.text;
+        LatestDivTitle.style.margin = '10px 20px 0'
 
         const LatestVideoInfoDiv = document.createElement('div');
         LatestVideoInfoDiv.id = 'LatestVideoInfoDiv';
         LatestVideoInfoDiv.style.width = '100%';
-        LatestVideoInfoDiv.style.height = '280px'
+        LatestVideoInfoDiv.style.height = '480px'
         LatestVideoInfoDiv.style.display = 'flex';
         LatestVideoInfoDiv.style.flexDirection = 'column';
         LatestVideoInfoDiv.style.justifyContent = 'flex-start';
         LatestVideoInfoDiv.style.alignItems = 'center';
         LatestVideoInfoDiv.style.margin = '10px 0';
         LatestVideoInfoDiv.style.overflowY = 'scroll';
+        LatestVideoInfoDiv.style.scrollbarWidth = 'thin';
 
-        for (i = 0; i < LatestVideoList.length; i++) {
+        for (let i = 0; i < LatestVideoList.length; i++) {
             const LatestVideo = document.createElement('div');
             LatestVideo.style.width = '90%';
             LatestVideo.style.height = '100px';
@@ -310,14 +329,61 @@ const Watchinfo = async () => {
             LatestVideo.style.flexDirection = 'row';
             LatestVideo.style.alignItems = 'center';
             LatestVideo.style.justifyContent = 'flex-start';
+            LatestVideo.style.cursor = 'pointer';
 
             const videoThumbnail = document.createElement('img');
             videoThumbnail.src = LatestVideoList[i].videoThumbnail;
             videoThumbnail.style.width = 'auto';
             videoThumbnail.style.height = '80px';
             videoThumbnail.style.borderRadius = '12px';
+
+            const videoTitleAndETCinfoDiv = document.createElement('div')
+            videoTitleAndETCinfoDiv.style.width = '55%';
+            videoTitleAndETCinfoDiv.style.height = '80px';
+            videoTitleAndETCinfoDiv.style.margin = '0 0 0 15px';
+            videoTitleAndETCinfoDiv.style.display = 'flex';
+            videoTitleAndETCinfoDiv.style.flexDirection = 'column';
+            videoTitleAndETCinfoDiv.style.alignItems = 'center';
+            videoTitleAndETCinfoDiv.style.justifyContent = 'center';
+
+            const videoTitle = document.createElement('a');
+            videoTitle.style.width = '100%';
+            videoTitle.style.height = '45px';
+            videoTitle.innerText = LatestVideoList[i].title.length < 32
+                ? LatestVideoList[i].title
+                : LatestVideoList[i].title.slice(0, 32) + '...';
+            videoTitle.style.color = colors.text;
+            videoTitle.style.display = 'flex';
+            videoTitle.style.alignItems = 'center';
+            videoTitle.style.justifyContent = 'flex-start';
+            videoTitle.style.fontSize = '13px';
+
+            const videolength = document.createElement('a');
+            videolength.style.width = '100%';
+            videolength.style.height = '10px';
+            videolength.innerText = `video Length: ${LatestVideoList[i].videolength}`
+            videolength.style.color = colors.text;
+            videolength.style.display = 'flex';
+            videolength.style.alignItems = 'center';
+            videolength.style.justifyContent = 'flex-start';
+
+            const videoETC = document.createElement('a');
+            videoETC.style.width = '100%';
+            videoETC.style.height = '20px';
+            videoETC.innerText = `${LatestVideoList[i].views} • ${LatestVideoList[i].published}`
+            videoETC.style.color = colors.text;
+            videoETC.style.display = 'flex';
+            videoETC.style.alignItems = 'center';
+            videoETC.style.justifyContent = 'flex-start';
+
+            LatestVideo.onclick = () => window.location.href = LatestVideoList[i].url;
+
             LatestVideoInfoDiv.appendChild(LatestVideo);
             LatestVideo.appendChild(videoThumbnail);
+            LatestVideo.appendChild(videoTitleAndETCinfoDiv);
+            videoTitleAndETCinfoDiv.appendChild(videoTitle);
+            videoTitleAndETCinfoDiv.appendChild(videolength);
+            videoTitleAndETCinfoDiv.appendChild(videoETC);
         }
 
         channelinfoDiv.onclick = () => window.location.href = channelUrl;
@@ -326,11 +392,11 @@ const Watchinfo = async () => {
         infoButton.onclick = () => {
             const isOpening = infoButton.classList.toggle('is-toggled');
             if (isOpening) {
-                createDiv.style.height = '500px';
+                createDiv.style.height = '600px';
                 setTimeout(() => headerDiv.style.borderRadius = '12px 12px 0 0', 100)
                 setTimeout(() => {
                     if (document.getElementById('watchinfo-div').offsetHeight >= 110) {
-                        createDiv.appendChild(NowVideoInfoDiv);
+                        createDiv.appendChild(LatestDivTitle);
                         createDiv.appendChild(LatestVideoInfoDiv);
                     };
                 }, 250)
@@ -339,7 +405,7 @@ const Watchinfo = async () => {
                 setTimeout(() => {
                     if (document.getElementById('watchinfo-div').offsetHeight <= 130) {
                         document.getElementById('LatestVideoInfoDiv').remove();
-                        document.getElementById('NowVideoInfoDiv').remove();
+                        document.getElementById('LatestDivTitle').remove()
                         headerDiv.style.borderRadius = '12px';
                     }
                 }, 280)
