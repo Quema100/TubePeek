@@ -395,7 +395,8 @@ const Watchinfo = async () => {
                 createDiv.style.height = '600px';
                 setTimeout(() => headerDiv.style.borderRadius = '12px 12px 0 0', 100)
                 setTimeout(() => {
-                    if (document.getElementById('watchinfo-div').offsetHeight >= 110) {
+                    const watchInfoDiv = document.getElementById('watchinfo-div');
+                    if (watchInfoDiv && watchInfoDiv.offsetHeight >= 110) {
                         createDiv.appendChild(LatestDivTitle);
                         createDiv.appendChild(LatestVideoInfoDiv);
                     };
@@ -403,7 +404,8 @@ const Watchinfo = async () => {
             } else {
                 createDiv.style.height = '100px';
                 setTimeout(() => {
-                    if (document.getElementById('watchinfo-div').offsetHeight <= 130) {
+                    const watchInfoDiv = document.getElementById('watchinfo-div');
+                    if (watchInfoDiv && watchInfoDiv.offsetHeight <= 130) {
                         document.getElementById('LatestVideoInfoDiv').remove();
                         document.getElementById('LatestDivTitle').remove()
                         headerDiv.style.borderRadius = '12px';
