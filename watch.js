@@ -348,7 +348,8 @@ const Watchinfo = async () => {
 
             const videoTitle = document.createElement('a');
             videoTitle.style.width = '100%';
-            videoTitle.style.height = '45px';
+            videoTitle.style.height = '40%';
+            videoTitle.style.margin = '5px 0';
             videoTitle.innerText = LatestVideoList[i].title.length < 32
                 ? LatestVideoList[i].title
                 : LatestVideoList[i].title.slice(0, 32) + '...';
@@ -451,7 +452,7 @@ const handleNavigation = () => {
         setTimeout(() => {
             removeWatchinfo();
             setTimeout(() => Watchinfo(), 100)
-        }, 1200);
+        }, 1000);
     } else {
         removeWatchinfo();
     }
