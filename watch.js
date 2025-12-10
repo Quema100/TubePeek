@@ -199,8 +199,8 @@ const Watchinfo = async () => {
             "No Title Found" :
             /[\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf]/.test(NowVideo)?
             [...NowVideo.replace(/(?<=[^\w\s가-힣])\s+(?=[^\w\s가-힣])/g, '')].slice(0, 20).join('') + '...' :
-            [...NowVideo.replace(/(?<=[^\w\s가-힣])\s+(?=[^\w\s가-힣])/g, '$1')].length > 25 ?
-                [...NowVideo.replace(/(?<=[^\w\s가-힣])\s+(?=[^\w\s가-힣])/g, '$1')].slice(0, 25).join('') + '...' :
+            [...NowVideo.replace(/(?<=[^\w\s가-힣])\s+(?=[^\w\s가-힣])/g, '')].length > 25 ?
+                [...NowVideo.replace(/(?<=[^\w\s가-힣])\s+(?=[^\w\s가-힣])/g, '')].slice(0, 25).join('') + '...' :
                 NowVideo;
 
         TitleA.style.color = colors.text;
