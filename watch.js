@@ -348,7 +348,8 @@ const Watchinfo = async () => {
 
             const videoTitle = document.createElement('a');
             videoTitle.style.width = '100%';
-            videoTitle.style.height = '40%';
+            videoTitle.style.height = '35%';
+            videoTitle.style.maxHeight = '45%';
             videoTitle.style.margin = '5px 0';
             videoTitle.innerText = LatestVideoList[i].title.length < 32
                 ? LatestVideoList[i].title
