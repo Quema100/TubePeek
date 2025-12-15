@@ -475,7 +475,7 @@ const Watchinfo = async () => {
                     return strArr.length > 33 ? strArr.slice(0, 33).join('') + '...' : cleanStr;
                 }
                 else {
-                    return strArr.length > 24 ? strArr.slice(0, 24).join('') + '...' : cleanStr;
+                    return strArr.length > 24 ? strArr.slice(0, 23).join('') + '...' : cleanStr;
                 }
             })();
 
@@ -633,8 +633,15 @@ const Watchinfo = async () => {
         }
 
         if (localStorage.getItem('session') == 'shorts') {
-            await createShortList(colors, LatestShort.LatestVideoList, LatestVideoInfoDiv);
-            LatestShorts.style.background = colors.gradientionbg;
+            if (LatestShort == null) {
+                await sessions('videos');
+                await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
+                LatestVideos.style.background = colors.gradientionbg;
+                LatestShorts.style.background = 'transparent';
+            } else {
+                await createShortList(colors, LatestShort.LatestVideoList, LatestVideoInfoDiv);
+                LatestShorts.style.background = colors.gradientionbg;
+            }
         }
 
         channelinfoDiv.onclick = () => window.location.href = LatestVideo.channelUrl || LatestShort.channelUrl;
