@@ -27,10 +27,18 @@
 
                 const videosUrl = `https://www.youtube.com/channel/${channelId}/videos`;
 
-                getChannelLatestVideos(videosUrl).then(data => {
-                    console.log({ NowVideo, ...data })
-                })
+                const shortsUrl = `https://www.youtube.com/channel/${channelId}/shorts`;
 
+                Promise.all([
+                    getChannelLatestVideos(videosUrl).catch(() => null),
+                    getChannelLatestShorts(shortsUrl).catch(() => null)
+                ]).then(([videoData, shortsData]) => {
+                    console.log({
+                        NowVideo: NowVideo,
+                        LatestVideo: videoData,
+                        LatestShort: shortsData
+                    });
+                });
             } catch (e) {
                 console.error('ytInitialPlayerResponse JSON parse failed:', e);
             }
@@ -67,7 +75,7 @@ const getChannelLatestVideos = (videosUrl) => {
                 try {
                     const ytInitialData = JSON.parse(dataMatch[1]);
 
-                    console.log("ytInitialData", ytInitialData)
+                    console.log("LatestVideo - ytInitialData", ytInitialData)
 
                     const channelPFP = ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources[ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources.length - 1].url;
                     const channelName = ytInitialData.metadata?.channelMetadataRenderer.title;
@@ -76,7 +84,7 @@ const getChannelLatestVideos = (videosUrl) => {
                     const tabs = ytInitialData.contents?.twoColumnBrowseResultsRenderer?.tabs
                         || ytInitialData.contents?.singleColumnBrowseResultsRenderer?.tabs;
 
-                    console.log(tabs)
+                    console.log("LatestVideo", tabs)
 
                     if (!tabs) {
                         console.error('Failed to find tab information.');
@@ -95,7 +103,8 @@ const getChannelLatestVideos = (videosUrl) => {
 
                     const richGridRenderer = videosTab.content?.richGridRenderer?.contents || [];
 
-                    console.log(richGridRenderer)
+                    console.log("LatestVideo - richGridRenderer", richGridRenderer)
+
                     if (richGridRenderer.length > 0) {
                         richGridRenderer.forEach(item => {
                             const video = item.richItemRenderer?.content?.videoRenderer;
@@ -109,6 +118,95 @@ const getChannelLatestVideos = (videosUrl) => {
                             const videolength = video.lengthText?.accessibility.accessibilityData.label;
 
                             LatestVideoList.push({ title, videoThumbnail, url, published, views, videolength });
+                        });
+
+                    } else {
+                        console.error('richGridRenderer.contents is Empty.');
+                        return;
+                    }
+
+
+                    resolve({ channelPFP, channelName, subscriberCount, channelUrl, LatestVideoList })
+                } catch (e) {
+                    console.error('ytInitialData JSON parse failed:', e);
+                }
+            } else {
+                console.error('Failed to fetch channel videos page. Status code:', xhr2.status);
+            }
+        };
+
+        xhr2.onerror = () => {
+            console.error('Network error while requesting channel videos page.');
+        };
+
+        xhr2.send();
+    });
+};
+
+const getChannelLatestShorts = (videosUrl) => {
+    let LatestVideoList = []
+    return new Promise((resolve, reject) => {
+        const xhr2 = new XMLHttpRequest();
+        xhr2.open("GET", videosUrl, true);
+        xhr2.onload = () => {
+            if (xhr2.status >= 200 && xhr2.status < 300) {
+                const videosHtml = xhr2.responseText;
+
+                const dataMatch = videosHtml.match(/var ytInitialData = (\{.+?\});<\/script>/s)
+                    || videosHtml.match(/window\["ytInitialData"\] = (\{.+?\});<\/script>/s);
+
+                if (!dataMatch || !dataMatch[1]) {
+                    console.error('ytInitialData is not found.');
+                    return;
+                }
+
+                try {
+                    const ytInitialData = JSON.parse(dataMatch[1]);
+
+                    console.log("LatestShort - ytInitialData", ytInitialData)
+
+                    const channelPFP = ytInitialData.header?.pageHeaderRenderer.content
+                        ?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image
+                        ?.sources[ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources.length - 1].url;
+                    const channelName = ytInitialData.metadata?.channelMetadataRenderer.title;
+                    const channelUrl = ytInitialData.metadata?.channelMetadataRenderer.vanityChannelUrl;
+                    const subscriberCount = ytInitialData.header?.pageHeaderRenderer.content
+                        ?.pageHeaderViewModel?.metadata?.contentMetadataViewModel
+                        ?.metadataRows[1]?.metadataParts[0]?.accessibilityLabel || document.querySelector('#owner-sub-count')?.innerText?.trim() || 'Unknown Subscribers';
+                    const tabs = ytInitialData.contents?.twoColumnBrowseResultsRenderer?.tabs
+                        || ytInitialData.contents?.singleColumnBrowseResultsRenderer?.tabs;
+
+                    console.log("LatestShort", tabs)
+
+                    if (!tabs) {
+                        console.error('Failed to find tab information.');
+                        return;
+                    }
+
+                    const shortsTab = tabs.find(tab => {
+                        const title = tab.tabRenderer?.title?.toLowerCase();
+                        return title === 'shorts';
+                    })?.tabRenderer;
+
+                    if (!shortsTab) {
+                        console.error('Failed to find the Shorts tab.');
+                        return;
+                    }
+
+                    const richGridRenderer = shortsTab.content?.richGridRenderer?.contents || [];
+
+                    console.log("LatestShort - richGridRenderer", richGridRenderer)
+
+                    if (richGridRenderer.length > 0) {
+                        richGridRenderer.forEach(item => {
+                            const video = item.richItemRenderer?.content?.shortsLockupViewModel;
+                            if (!video) return;
+                            const title = video.overlayMetadata?.primaryText?.content;
+                            const videoThumbnail = video.thumbnailViewModel?.thumbnailViewModel?.image?.sources[video.thumbnailViewModel?.thumbnailViewModel?.image?.sources.length - 1].url
+                            const videoId = video.onTap?.innertubeCommand?.reelWatchEndpoint?.videoId;
+                            const url = `https://www.youtube.com/shorts/${videoId}`;
+                            const views = video.overlayMetadata.secondaryText.content || 'no info';
+                            LatestVideoList.push({ title, videoThumbnail, url, views });
                         });
 
                     } else {
