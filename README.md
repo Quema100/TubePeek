@@ -21,3 +21,6 @@ Feel free to fork this repository, open issues, and submit pull requests. Sugges
 
 ## Contact
 For questions or discussions related to this simulation, please open an issue in the GitHub repository.
+
+> [!IMPORTANT]   
+> This extension supports only English, Korean, and Japanese.
