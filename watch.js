@@ -14,9 +14,6 @@ const getYouTubeVideoInfo = () => {
 
                 try {
                     const playerResponse = JSON.parse(jsonString[1]);
-
-                    console.log(playerResponse)
-
                     if (playerResponse.videoDetails?.author.includes('- Topic')) return;
 
                     const channelId = playerResponse.videoDetails?.channelId;
@@ -78,7 +75,6 @@ const getChannelLatestVideos = (videosUrl) => {
 
                 try {
                     const ytInitialData = JSON.parse(dataMatch[1]);
-                    console.log(ytInitialData)
                     const channelPFP = ytInitialData.header?.pageHeaderRenderer.content
                         ?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image
                         ?.sources[ytInitialData.header?.pageHeaderRenderer.content?.pageHeaderViewModel.image.decoratedAvatarViewModel.avatar.avatarViewModel.image?.sources.length - 1].url;
