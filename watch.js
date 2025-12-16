@@ -260,7 +260,7 @@ const createVideoList = async (colors, LatestVideoList, LatestVideoInfoDiv) => {
 
         const videoTitle = document.createElement('a');
         videoTitle.style.width = '100%';
-        videoTitle.style.height = '35%';
+        videoTitle.style.minHeight = '35%';
         videoTitle.style.maxHeight = '45%';
         videoTitle.style.margin = '5px 0';
         videoTitle.innerText = LatestVideoList[i].title == (undefined || null) ?
@@ -321,10 +321,10 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
     for (let i = 0; i < LatestShortList.length; i++) {
         const LatestVideo = document.createElement('div');
         LatestVideo.style.width = '90%';
-        LatestVideo.style.height = '150px';
+        LatestVideo.style.height = '90%';
         LatestVideo.style.margin = '10px 20px';
         LatestVideo.style.display = 'flex';
-        LatestVideo.style.flexDirection = 'row';
+        LatestVideo.style.flexDirection = 'column';
         LatestVideo.style.alignItems = 'center';
         LatestVideo.style.justifyContent = 'flex-start';
         LatestVideo.style.cursor = 'pointer';
@@ -332,13 +332,12 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
         const videoThumbnail = document.createElement('img');
         videoThumbnail.src = LatestShortList[i].videoThumbnail;
         videoThumbnail.style.width = 'auto';
-        videoThumbnail.style.height = '130px';
+        videoThumbnail.style.height = '170px';
         videoThumbnail.style.borderRadius = '12px';
 
         const videoTitleAndETCinfoDiv = document.createElement('div')
-        videoTitleAndETCinfoDiv.style.width = '55%';
-        videoTitleAndETCinfoDiv.style.height = '80px';
-        videoTitleAndETCinfoDiv.style.margin = '0 0 0 15px';
+        videoTitleAndETCinfoDiv.style.width = '100%';
+        videoTitleAndETCinfoDiv.style.height = '100%';
         videoTitleAndETCinfoDiv.style.display = 'flex';
         videoTitleAndETCinfoDiv.style.flexDirection = 'column';
         videoTitleAndETCinfoDiv.style.alignItems = 'center';
@@ -346,8 +345,8 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
 
         const videoTitle = document.createElement('a');
         videoTitle.style.width = '100%';
-        videoTitle.style.height = '35%';
-        videoTitle.style.maxHeight = '45%';
+        videoTitle.style.minHeight = '40%';
+        videoTitle.style.maxHeight = '90%';
         videoTitle.style.margin = '5px 0';
         videoTitle.innerText = LatestShortList[i].title == (undefined || null) ?
             "No Title Found" :
@@ -616,34 +615,21 @@ const Watchinfo = async () => {
         LatestVideoInfoDiv.style.width = '100%';
         LatestVideoInfoDiv.style.height = '480px'
         LatestVideoInfoDiv.style.display = 'flex';
-        LatestVideoInfoDiv.style.flexDirection = 'column';
         LatestVideoInfoDiv.style.justifyContent = 'flex-start';
         LatestVideoInfoDiv.style.alignItems = 'center';
         LatestVideoInfoDiv.style.margin = '10px 0';
-        LatestVideoInfoDiv.style.overflowY = 'scroll';
         LatestVideoInfoDiv.style.scrollbarWidth = 'thin';
-
-        if (localStorage.getItem('session') == 'videos') {
-            await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
-            LatestVideos.style.background = colors.gradientionbg;
-        }
-
-        if (localStorage.getItem('session') == 'shorts') {
-            if (LatestShort == null) {
-                await sessions('videos');
-                await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
-                LatestVideos.style.background = colors.gradientionbg;
-                LatestShorts.style.background = 'transparent';
-            } else {
-                await createShortList(colors, LatestShort.LatestVideoList, LatestVideoInfoDiv);
-                LatestShorts.style.background = colors.gradientionbg;
-            }
-        }
 
         channelinfoDiv.onclick = () => window.location.href = LatestVideo.channelUrl || LatestShort.channelUrl;
 
         LatestVideos.onclick = async () => {
             if (localStorage.getItem('session') != 'videos') {
+
+                createDiv.style.height = '600px';
+                LatestVideoInfoDiv.style.overflowY = 'scroll';
+                LatestVideoInfoDiv.style.overflowX = 'hidden';
+                LatestVideoInfoDiv.style.flexDirection = 'column';
+
                 await sessions('videos');
                 await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
                 LatestVideos.style.background = colors.gradientionbg;
@@ -653,6 +639,12 @@ const Watchinfo = async () => {
 
         LatestShorts.onclick = async () => {
             if (localStorage.getItem('session') != 'shorts') {
+
+                createDiv.style.height = '470px';
+                LatestVideoInfoDiv.style.overflowX = 'scroll';
+                LatestVideoInfoDiv.style.overflowY = 'hidden';
+                LatestVideoInfoDiv.style.flexDirection = 'row';
+
                 await sessions('shorts');
                 await createShortList(colors, LatestShort.LatestVideoList, LatestVideoInfoDiv);
                 LatestShorts.style.background = colors.gradientionbg;
@@ -661,10 +653,42 @@ const Watchinfo = async () => {
         }
 
 
-        infoButton.onclick = () => {
+        infoButton.onclick = async () => {
             const isOpening = infoButton.classList.toggle('is-toggled');
             if (isOpening) {
-                createDiv.style.height = '600px';
+
+                if (localStorage.getItem('session') == 'videos') {
+
+                    createDiv.style.height = '600px';
+                    LatestVideoInfoDiv.style.overflowY = 'scroll';
+                    LatestVideoInfoDiv.style.flexDirection = 'column';
+
+                    await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
+                    LatestVideos.style.background = colors.gradientionbg;
+                }
+
+                if (localStorage.getItem('session') == 'shorts') {
+                    if (LatestShort == null) {
+
+                        createDiv.style.height = '600px';
+                        LatestVideoInfoDiv.style.overflowY = 'scroll';
+                        LatestVideoInfoDiv.style.flexDirection = 'column';
+
+                        await sessions('videos');
+                        await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
+                        LatestVideos.style.background = colors.gradientionbg;
+                        LatestShorts.style.background = 'transparent';
+                    } else {
+
+                        createDiv.style.height = '470px';
+                        LatestVideoInfoDiv.style.overflowX = 'scroll';
+                        LatestVideoInfoDiv.style.flexDirection = 'row';
+
+                        await createShortList(colors, LatestShort.LatestVideoList, LatestVideoInfoDiv);
+                        LatestShorts.style.background = colors.gradientionbg;
+                    }
+                }
+
                 setTimeout(() => headerDiv.style.borderRadius = '12px 12px 0 0', 100)
                 setTimeout(() => {
                     const watchInfoDiv = document.getElementById('watchinfo-div');
