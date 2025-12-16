@@ -176,7 +176,7 @@ const getChannelLatestShorts = (videosUrl) => {
 
                     const shortsTab = tabs.find(tab => {
                         const title = tab.tabRenderer?.title?.toLowerCase();
-                        return title === 'shorts';
+                        return title === 'shorts' || title === 'ショート';
                     })?.tabRenderer;
 
                     if (!shortsTab) {
