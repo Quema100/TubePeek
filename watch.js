@@ -230,6 +230,43 @@ const sessions = async (data = null) => {
     }
 }
 
+/**
+ * @param {HTMLDivElement} createDiv
+ * @param {HTMLDivElement} LatestVideos
+ * @param {HTMLDivElement} LatestShorts
+ * @param {HTMLDivElement} LatestVideoInfoDiv
+ */
+const videosUI = async (colors, createDiv, LatestVideo, LatestVideos, LatestShorts, LatestVideoInfoDiv) => {
+    createDiv.style.height = '600px';
+    LatestVideoInfoDiv.style.overflowY = 'scroll';
+    LatestVideoInfoDiv.style.overflowX = 'hidden';
+    LatestVideoInfoDiv.style.flexDirection = 'column';
+
+    await sessions('videos');
+    await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
+    LatestVideos.style.background = colors.gradientionbg;
+    LatestShorts.style.background = 'transparent';
+}
+
+/**
+ * @param {HTMLDivElement} createDiv
+ * @param {HTMLDivElement} LatestVideos
+ * @param {HTMLDivElement} LatestShorts
+ * @param {HTMLDivElement} LatestVideoInfoDiv
+
+ */
+const shortsUI = async (colors, createDiv, LatestShort, LatestVideos, LatestShorts, LatestVideoInfoDiv) => {
+    createDiv.style.height = '470px';
+    LatestVideoInfoDiv.style.overflowX = 'scroll';
+    LatestVideoInfoDiv.style.overflowY = 'hidden';
+    LatestVideoInfoDiv.style.flexDirection = 'row';
+
+    await sessions('shorts');
+    await createShortList(colors, LatestShort.LatestVideoList, LatestVideoInfoDiv);
+    LatestShorts.style.background = colors.gradientionbg;
+    LatestVideos.style.background = 'transparent';
+}
+
 const createVideoList = async (colors, LatestVideoList, LatestVideoInfoDiv) => {
     LatestVideoInfoDiv.replaceChildren();
     for (let i = 0; i < LatestVideoList.length; i++) {
@@ -322,7 +359,7 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
         const LatestVideo = document.createElement('div');
         LatestVideo.style.width = '90%';
         LatestVideo.style.height = '90%';
-        LatestVideo.style.margin = '10px 20px';
+        LatestVideo.style.margin = '10px 5px';
         LatestVideo.style.display = 'flex';
         LatestVideo.style.flexDirection = 'column';
         LatestVideo.style.alignItems = 'center';
@@ -612,44 +649,24 @@ const Watchinfo = async () => {
 
         const LatestVideoInfoDiv = document.createElement('div');
         LatestVideoInfoDiv.id = 'LatestVideoInfoDiv';
-        LatestVideoInfoDiv.style.width = '100%';
+        LatestVideoInfoDiv.style.width = '95%';
         LatestVideoInfoDiv.style.height = '480px'
         LatestVideoInfoDiv.style.display = 'flex';
         LatestVideoInfoDiv.style.justifyContent = 'flex-start';
         LatestVideoInfoDiv.style.alignItems = 'center';
-        LatestVideoInfoDiv.style.margin = '10px 0';
+        LatestVideoInfoDiv.style.margin = '10px';
         LatestVideoInfoDiv.style.scrollbarWidth = 'thin';
 
         channelinfoDiv.onclick = () => window.location.href = LatestVideo.channelUrl || LatestShort.channelUrl;
 
         LatestVideos.onclick = async () => {
-            if (localStorage.getItem('session') != 'videos') {
-
-                createDiv.style.height = '600px';
-                LatestVideoInfoDiv.style.overflowY = 'scroll';
-                LatestVideoInfoDiv.style.overflowX = 'hidden';
-                LatestVideoInfoDiv.style.flexDirection = 'column';
-
-                await sessions('videos');
-                await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
-                LatestVideos.style.background = colors.gradientionbg;
-                LatestShorts.style.background = 'transparent';
-            }
+            if (localStorage.getItem('session') != 'videos')
+                await videosUI(colors, createDiv, LatestVideo, LatestVideos, LatestShorts, LatestVideoInfoDiv);
         }
 
         LatestShorts.onclick = async () => {
-            if (localStorage.getItem('session') != 'shorts') {
-
-                createDiv.style.height = '470px';
-                LatestVideoInfoDiv.style.overflowX = 'scroll';
-                LatestVideoInfoDiv.style.overflowY = 'hidden';
-                LatestVideoInfoDiv.style.flexDirection = 'row';
-
-                await sessions('shorts');
-                await createShortList(colors, LatestShort.LatestVideoList, LatestVideoInfoDiv);
-                LatestShorts.style.background = colors.gradientionbg;
-                LatestVideos.style.background = 'transparent';
-            }
+            if (localStorage.getItem('session') != 'shorts')
+                await shortsUI(colors, createDiv, LatestShort, LatestVideos, LatestShorts, LatestVideoInfoDiv);
         }
 
 
@@ -657,37 +674,13 @@ const Watchinfo = async () => {
             const isOpening = infoButton.classList.toggle('is-toggled');
             if (isOpening) {
 
-                if (localStorage.getItem('session') == 'videos') {
+                if (localStorage.getItem('session') == 'videos')
+                    await videosUI(colors, createDiv, LatestVideo, LatestVideos, LatestShorts, LatestVideoInfoDiv);
 
-                    createDiv.style.height = '600px';
-                    LatestVideoInfoDiv.style.overflowY = 'scroll';
-                    LatestVideoInfoDiv.style.flexDirection = 'column';
-
-                    await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
-                    LatestVideos.style.background = colors.gradientionbg;
-                }
-
-                if (localStorage.getItem('session') == 'shorts') {
-                    if (LatestShort == null) {
-
-                        createDiv.style.height = '600px';
-                        LatestVideoInfoDiv.style.overflowY = 'scroll';
-                        LatestVideoInfoDiv.style.flexDirection = 'column';
-
-                        await sessions('videos');
-                        await createVideoList(colors, LatestVideo.LatestVideoList, LatestVideoInfoDiv);
-                        LatestVideos.style.background = colors.gradientionbg;
-                        LatestShorts.style.background = 'transparent';
-                    } else {
-
-                        createDiv.style.height = '470px';
-                        LatestVideoInfoDiv.style.overflowX = 'scroll';
-                        LatestVideoInfoDiv.style.flexDirection = 'row';
-
-                        await createShortList(colors, LatestShort.LatestVideoList, LatestVideoInfoDiv);
-                        LatestShorts.style.background = colors.gradientionbg;
-                    }
-                }
+                if (localStorage.getItem('session') == 'shorts')
+                    LatestShort == null
+                        ? await videosUI(colors, createDiv, LatestVideo, LatestVideos, LatestShorts, LatestVideoInfoDiv)
+                        : await shortsUI(colors, createDiv, LatestShort, LatestVideos, LatestShorts, LatestVideoInfoDiv);
 
                 setTimeout(() => headerDiv.style.borderRadius = '12px 12px 0 0', 100)
                 setTimeout(() => {
