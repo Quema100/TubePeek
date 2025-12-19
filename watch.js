@@ -357,7 +357,7 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
     LatestVideoInfoDiv.replaceChildren();
     for (let i = 0; i < LatestShortList.length; i++) {
         const LatestVideo = document.createElement('div');
-        LatestVideo.style.width = '90%';
+        LatestVideo.style.width = '96px';
         LatestVideo.style.height = '90%';
         LatestVideo.style.margin = '10px 5px';
         LatestVideo.style.display = 'flex';
