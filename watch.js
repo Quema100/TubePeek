@@ -238,7 +238,7 @@ const sessions = async (data = null) => {
  */
 const videosUI = async (colors, createDiv, LatestVideo, LatestVideos, LatestShorts, LatestVideoInfoDiv) => {
     createDiv.style.height = '600px';
-    LatestVideoInfoDiv.style.overflowY = 'scroll';
+    LatestVideoInfoDiv.style.overflowY = 'auto';
     LatestVideoInfoDiv.style.overflowX = 'hidden';
     LatestVideoInfoDiv.style.flexDirection = 'column';
 
@@ -257,7 +257,7 @@ const videosUI = async (colors, createDiv, LatestVideo, LatestVideos, LatestShor
  */
 const shortsUI = async (colors, createDiv, LatestShort, LatestVideos, LatestShorts, LatestVideoInfoDiv) => {
     createDiv.style.height = '470px';
-    LatestVideoInfoDiv.style.overflowX = 'scroll';
+    LatestVideoInfoDiv.style.overflowX = 'auto';
     LatestVideoInfoDiv.style.overflowY = 'hidden';
     LatestVideoInfoDiv.style.flexDirection = 'row';
 
