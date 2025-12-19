@@ -1,10 +1,11 @@
 const getYouTubeVideoInfo = () => {
     return new Promise((resolve, reject) => {
-        const xhr1 = new XMLHttpRequest();
-        xhr1.open("GET", window.location.href, true);
-        xhr1.onload = () => {
-            if (xhr1.status >= 200 && xhr1.status < 300) {
-                const html = xhr1.responseText;
+        const xhr = new XMLHttpRequest();
+        const videoId = new URLSearchParams(window.location.search).get('v');
+        xhr.open("GET", videoId ? `https://www.youtube.com/watch?v=${videoId}` : window.location.href.split('&')[0], true);
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                const html = xhr.responseText;
 
                 const jsonString = html.match(/ytInitialPlayerResponse\s*=\s*({.+?});/s);
                 if (!jsonString || !jsonString[1]) {
@@ -48,22 +49,22 @@ const getYouTubeVideoInfo = () => {
 
         };
 
-        xhr1.onerror = () => {
-            console.error('Network error while requesting this vieo page.');
+        xhr.onerror = () => {
+            console.error('Network error while requesting this video page.');
         };
 
-        xhr1.send();
+        xhr.send();
     })
 };
 
 const getChannelLatestVideos = (videosUrl) => {
     let LatestVideoList = []
     return new Promise((resolve, reject) => {
-        const xhr2 = new XMLHttpRequest();
-        xhr2.open("GET", videosUrl, true);
-        xhr2.onload = () => {
-            if (xhr2.status >= 200 && xhr2.status < 300) {
-                const videosHtml = xhr2.responseText;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", videosUrl, true);
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                const videosHtml = xhr.responseText;
 
                 const dataMatch = videosHtml.match(/var ytInitialData = (\{.+?\});<\/script>/s)
                     || videosHtml.match(/window\["ytInitialData"\] = (\{.+?\});<\/script>/s);
@@ -132,22 +133,22 @@ const getChannelLatestVideos = (videosUrl) => {
             }
         };
 
-        xhr2.onerror = () => {
+        xhr.onerror = () => {
             console.error('Network error while requesting channel videos page.');
         };
 
-        xhr2.send();
+        xhr.send();
     });
 };
 
 const getChannelLatestShorts = (videosUrl) => {
     let LatestVideoList = []
     return new Promise((resolve, reject) => {
-        const xhr2 = new XMLHttpRequest();
-        xhr2.open("GET", videosUrl, true);
-        xhr2.onload = () => {
-            if (xhr2.status >= 200 && xhr2.status < 300) {
-                const videosHtml = xhr2.responseText;
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", videosUrl, true);
+        xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                const videosHtml = xhr.responseText;
 
                 const dataMatch = videosHtml.match(/var ytInitialData = (\{.+?\});<\/script>/s)
                     || videosHtml.match(/window\["ytInitialData"\] = (\{.+?\});<\/script>/s);
@@ -212,11 +213,11 @@ const getChannelLatestShorts = (videosUrl) => {
             }
         };
 
-        xhr2.onerror = () => {
+        xhr.onerror = () => {
             console.error('Network error while requesting channel videos page.');
         };
 
-        xhr2.send();
+        xhr.send();
     });
 };
 
