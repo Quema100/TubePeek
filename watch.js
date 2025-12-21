@@ -299,6 +299,7 @@ const createVideoList = async (colors, LatestVideoList, LatestVideoInfoDiv) => {
         const videoTitle = document.createElement('a');
         videoTitle.style.width = '100%';
         videoTitle.style.minHeight = '35%';
+        videoTitle.style.height = 'auto';
         videoTitle.style.maxHeight = '45%';
         videoTitle.style.margin = '5px 0';
         videoTitle.innerText = LatestVideoList[i].title == (undefined || null) ?
@@ -370,12 +371,14 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
         const videoThumbnail = document.createElement('img');
         videoThumbnail.src = LatestShortList[i].videoThumbnail;
         videoThumbnail.style.width = 'auto';
+        videoThumbnail.style.maxWidth = '96px';
+        videoThumbnail.style.objectFit = 'cover';
         videoThumbnail.style.height = '170px';
         videoThumbnail.style.borderRadius = '12px';
 
         const videoTitleAndETCinfoDiv = document.createElement('div')
         videoTitleAndETCinfoDiv.style.width = '100%';
-        videoTitleAndETCinfoDiv.style.height = '100%';
+        videoTitleAndETCinfoDiv.style.height = '110px';
         videoTitleAndETCinfoDiv.style.display = 'flex';
         videoTitleAndETCinfoDiv.style.flexDirection = 'column';
         videoTitleAndETCinfoDiv.style.alignItems = 'center';
@@ -383,7 +386,8 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
 
         const videoTitle = document.createElement('a');
         videoTitle.style.width = '100%';
-        videoTitle.style.minHeight = '40%';
+        videoTitle.style.minHeight = '10%';
+        videoTitle.style.height = 'auto';
         videoTitle.style.maxHeight = '90%';
         videoTitle.style.margin = '5px 0';
         videoTitle.innerText = LatestShortList[i].title == (undefined || null) ?
