@@ -701,9 +701,9 @@ const Watchinfo = async () => {
                 createDiv.style.height = '100px';
                 setTimeout(() => {
                     const watchInfoDiv = document.getElementById('watchinfo-div');
-                    if (watchInfoDiv && watchInfoDiv.offsetHeight <= 130) {
-                        document.getElementById('LatestVideoInfoDiv').remove();
-                        document.getElementById('LatestDiv').remove()
+                    if (watchInfoDiv && watchInfoDiv.offsetHeight <= 140) {
+                        LatestVideoInfoDiv.remove();
+                        LatestDiv.remove();
                         headerDiv.style.borderRadius = '12px';
                     }
                 }, 280)
