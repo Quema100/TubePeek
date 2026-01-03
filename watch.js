@@ -232,6 +232,7 @@ const sessions = async (data = null) => {
 }
 
 /**
+ * @param {JSON} LatestVideo
  * @param {HTMLDivElement} createDiv
  * @param {HTMLDivElement} LatestVideos
  * @param {HTMLDivElement} LatestShorts
@@ -250,11 +251,11 @@ const videosUI = async (colors, createDiv, LatestVideo, LatestVideos, LatestShor
 }
 
 /**
+ * @param {JSON} LatestShort
  * @param {HTMLDivElement} createDiv
  * @param {HTMLDivElement} LatestVideos
  * @param {HTMLDivElement} LatestShorts
  * @param {HTMLDivElement} LatestVideoInfoDiv
-
  */
 const shortsUI = async (colors, createDiv, LatestShort, LatestVideos, LatestShorts, LatestVideoInfoDiv) => {
     createDiv.style.height = '470px';
@@ -268,6 +269,10 @@ const shortsUI = async (colors, createDiv, LatestShort, LatestVideos, LatestShor
     LatestVideos.style.background = 'transparent';
 }
 
+/**
+ * @param {Array} LatestVideoList
+ * @param {HTMLDivElement} LatestVideoInfoDiv
+ */
 const createVideoList = async (colors, LatestVideoList, LatestVideoInfoDiv) => {
     LatestVideoInfoDiv.replaceChildren();
     for (let i = 0; i < LatestVideoList.length; i++) {
@@ -314,7 +319,7 @@ const createVideoList = async (colors, LatestVideoList, LatestVideoInfoDiv) => {
                     return strArr.length > 22 ? strArr.slice(0, 22).join('') + '...' : cleanStr;
                 }
                 else if (/[a-zA-Z]/.test(cleanStr) && !/[가-힣]/.test(cleanStr)) {
-                    return strArr.length > 33 ? strArr.slice(0, 33).join('') + '...' : cleanStr;
+                    return strArr.length > 33 ? strArr.slice(0, 36).join('') + '...' : cleanStr;
                 }
                 else {
                     return strArr.length > 24 ? strArr.slice(0, 24).join('') + '...' : cleanStr;
@@ -355,6 +360,10 @@ const createVideoList = async (colors, LatestVideoList, LatestVideoInfoDiv) => {
     }
 }
 
+/**
+ * @param {Array} LatestShortList
+ * @param {HTMLDivElement} LatestVideoInfoDiv
+ */
 const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
     LatestVideoInfoDiv.replaceChildren();
     for (let i = 0; i < LatestShortList.length; i++) {
@@ -402,7 +411,7 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
                     return strArr.length > 22 ? strArr.slice(0, 22).join('') + '...' : cleanStr;
                 }
                 else if (/[a-zA-Z]/.test(cleanStr) && !/[가-힣]/.test(cleanStr)) {
-                    return strArr.length > 33 ? strArr.slice(0, 33).join('') + '...' : cleanStr;
+                    return strArr.length > 33 ? strArr.slice(0, 36).join('') + '...' : cleanStr;
                 }
                 else {
                     return strArr.length > 24 ? strArr.slice(0, 24).join('') + '...' : cleanStr;
@@ -488,6 +497,7 @@ const Watchinfo = async () => {
     TitleWithChannelDiv.style.alignItems = 'flex-start';
     TitleWithChannelDiv.style.fontSize = '15px';
     TitleWithChannelDiv.style.margin = '0 5px 0 20px';
+
     try {
         const data = await getYouTubeVideoInfo();
         const { NowVideo, LatestVideo, LatestShort } = data;
@@ -503,13 +513,13 @@ const Watchinfo = async () => {
                 const cleanStr = NowVideo.replace(/(?<=[^\w\s가-힣])\s+(?=[^\w\s가-힣])/g, '');
                 const strArr = [...cleanStr];
                 if (/[\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf]/.test(cleanStr)) {
-                    return strArr.length > 20 ? strArr.slice(0, 20).join('') + '...' : cleanStr;
+                    return strArr.length > 20 ? strArr.slice(0, 19).join('') + '...' : cleanStr;
                 }
                 else if (/[가-힣]/.test(cleanStr) && !/[a-zA-Z]/.test(cleanStr)) {
                     return strArr.length > 22 ? strArr.slice(0, 22).join('') + '...' : cleanStr;
                 }
                 else if (/[a-zA-Z]/.test(cleanStr) && !/[가-힣]/.test(cleanStr)) {
-                    return strArr.length > 33 ? strArr.slice(0, 33).join('') + '...' : cleanStr;
+                    return strArr.length > 33 ? strArr.slice(0, 36).join('') + '...' : cleanStr;
                 }
                 else {
                     return strArr.length > 24 ? strArr.slice(0, 23).join('') + '...' : cleanStr;
@@ -518,21 +528,24 @@ const Watchinfo = async () => {
 
         TitleA.style.color = colors.text;
         TitleA.style.width = '100%';
-        TitleA.style.height = '50px';
-        TitleA.style.fontSize = '14.5px';
+        TitleA.style.height = 'auto';
+        TitleA.style.maxHeight = '50px';
+        TitleA.style.fontSize = '14px';
+
+        TitleA.style.margin = 'auto';
         TitleA.style.display = 'flex';
         TitleA.style.alignItems = 'center';
 
 
+
         const channelinfoDiv = document.createElement('div');
         channelinfoDiv.id = 'channelinfoDiv';
-        channelinfoDiv.style.width = '70%';
+        channelinfoDiv.style.width = '100%';
         channelinfoDiv.style.height = '50px';
         channelinfoDiv.style.display = 'flex';
         channelinfoDiv.style.flexDirection = 'row';
         channelinfoDiv.style.justifyContent = 'flex-start';
         channelinfoDiv.style.alignItems = 'center';
-        channelinfoDiv.style.cursor = 'pointer';
         channelinfoDiv.style.margin = '0 auto 0 0';
 
         const channelImg = document.createElement('img');
@@ -541,29 +554,34 @@ const Watchinfo = async () => {
         channelImg.style.height = '35px';
         channelImg.style.marginBottom = '10px';
         channelImg.style.borderRadius = '50%';
+        channelImg.style.cursor = 'pointer';
+
 
         const channelinfo = document.createElement('div');
         channelinfo.style.width = '100%';
         channelinfo.style.height = '50px';
         channelinfo.style.display = 'flex';
         channelinfo.style.flexDirection = 'column';
-        channelinfo.style.alignItems = 'center';
+        channelinfo.style.alignItems = 'flex-start';
         channelinfo.style.justifyContent = 'center';
         channelinfo.style.margin = '0 10px'
 
 
-        const channel_Name = document.createElement('a');
-        channel_Name.innerText = LatestVideo.channelName || LatestShort.channelName;
-        channel_Name.style.width = '100%';
-        channel_Name.style.height = '25px';
-        channel_Name.style.color = colors.text;
-        channel_Name.style.fontSize = '11px';
-        channel_Name.style.display = 'flex';
-        channel_Name.style.alignItems = 'center';
+        const channelName = document.createElement('a');
+        channelName.innerText = LatestVideo.channelName || LatestShort.channelName;
+        channelName.style.maxWidth = '100%';
+        channelName.style.width = 'auto';
+        channelName.style.height = '25px';
+        channelName.style.color = colors.text;
+        channelName.style.fontSize = '11px';
+        channelName.style.display = 'flex';
+        channelName.style.alignItems = 'center';
+        channelName.style.cursor = 'pointer';
 
         const channelSub = document.createElement('a');
         channelSub.innerText = LatestVideo.subscriberCount || LatestShort.subscriberCount;
-        channelSub.style.width = '100%';
+        channelSub.style.maxWidth = '70%';
+        channelSub.style.width = 'auto';
         channelSub.style.height = '25px';
         channelSub.style.color = colors.subText;
         channelSub.style.fontSize = '9px';
@@ -662,7 +680,9 @@ const Watchinfo = async () => {
         LatestVideoInfoDiv.style.margin = '10px';
         LatestVideoInfoDiv.style.scrollbarWidth = 'thin';
 
-        channelinfoDiv.onclick = () => window.location.href = LatestVideo.channelUrl || LatestShort.channelUrl;
+        channelImg.onclick = () => window.location.href = LatestVideo.channelUrl || LatestShort.channelUrl;
+        channelName.onclick = () => window.location.href = LatestVideo.channelUrl || LatestShort.channelUrl;
+
 
         LatestVideos.onclick = async () => {
             if (localStorage.getItem('session') != 'videos')
@@ -717,7 +737,7 @@ const Watchinfo = async () => {
         TitleWithChannelDiv.appendChild(channelinfoDiv);
         channelinfoDiv.appendChild(channelImg);
         channelinfoDiv.appendChild(channelinfo);
-        channelinfo.appendChild(channel_Name);
+        channelinfo.appendChild(channelName);
         channelinfo.appendChild(channelSub);
         headerDiv.appendChild(infoButtonDiv);
         infoButtonDiv.appendChild(infoButton);
