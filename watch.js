@@ -350,6 +350,7 @@ const createVideoList = async (colors, LatestVideoList, LatestVideoInfoDiv) => {
         videoETC.style.justifyContent = 'flex-start';
 
         LatestVideo.onclick = () => window.location.href = LatestVideoList[i].url;
+        LatestVideo.onmousedown = (e) => { if (e.button == 1) window.open(LatestVideoList[i].url, '_blank', 'noopener,noreferrer'); }
 
         LatestVideoInfoDiv.appendChild(LatestVideo);
         LatestVideo.appendChild(videoThumbnail);
@@ -433,6 +434,7 @@ const createShortList = async (colors, LatestShortList, LatestVideoInfoDiv) => {
         videoETC.style.justifyContent = 'flex-start';
 
         LatestVideo.onclick = () => window.location.href = LatestShortList[i].url;
+        LatestVideo.onmousedown = (e) => { if (e.button == 1) window.open(LatestShortList[i].url, '_blank', 'noopener,noreferrer'); }
 
         LatestVideoInfoDiv.appendChild(LatestVideo);
         LatestVideo.appendChild(videoThumbnail);
@@ -681,7 +683,11 @@ const Watchinfo = async () => {
         LatestVideoInfoDiv.style.scrollbarWidth = 'thin';
 
         channelImg.onclick = () => window.location.href = LatestVideo.channelUrl || LatestShort.channelUrl;
+        channelImg.mousedown = (e) => { if (e.button == 1) window.open(LatestVideo.channelUrl || LatestShort.channelUrl, '_blank', 'noopener,noreferrer'); }
+
         channelName.onclick = () => window.location.href = LatestVideo.channelUrl || LatestShort.channelUrl;
+        channelName.onmousedown = (e) => { if (e.button == 1) window.open(LatestVideo.channelUrl || LatestShort.channelUrl, '_blank', 'noopener,noreferrer'); }
+
 
 
         LatestVideos.onclick = async () => {
