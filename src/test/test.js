@@ -115,12 +115,12 @@ const getChannelLatestVideos = (videosUrl) => {
                             const videoId = video.contentId;
                             const url = `https://www.youtube.com/watch?v=${videoId}`;
                             const published = video.metadata?.lockupMetadataViewModel?.metadata
-                                ?.contentMetadataViewModel?.metadataRows[0]?.metadataParts[1]?.text || 'Unknown publish time';
+                                ?.contentMetadataViewModel?.metadataRows[0]?.metadataParts[1]?.text?.content || 'Unknown publish time';
                             const views = video.metadata?.lockupMetadataViewModel?.metadata
-                                ?.contentMetadataViewModel?.metadataRows[0]?.metadataParts[0]?.text || 'Unknown view count';
+                                ?.contentMetadataViewModel?.metadataRows[0]?.metadataParts[0]?.text?.content || 'Unknown view count';
                             const videolength = video.contentImage?.thumbnailViewModel?.overlays
                                 ?.find(overlay => overlay.thumbnailBottomOverlayViewModel)?.thumbnailBottomOverlayViewModel?.badges[0]
-                                ?.thumbnailBadgeViewModel?.rendererContext?.text || 'Unknown length';
+                                ?.thumbnailBadgeViewModel?.text || 'Unknown length';
 
                             LatestVideoList.push({ title, videoThumbnail, url, published, views, videolength });
                         });
