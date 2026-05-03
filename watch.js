@@ -106,15 +106,20 @@ const getChannelLatestVideos = (videosUrl) => {
 
                     if (richGridRenderer.length > 0) {
                         richGridRenderer.forEach(item => {
-                            const video = item.richItemRenderer?.content?.videoRenderer;
+                            const video = item.richItemRenderer?.content?.lockupViewModel;
                             if (!video) return;
-                            const title = video.title.runs[0].text;
-                            const videoThumbnail = video.thumbnail?.thumbnails[video.thumbnail?.thumbnails.length - 1].url
-                            const videoId = video.videoId;
+                            const title = video.metadata?.lockupMetadataViewModel?.title?.content || 'Unknown Title';
+                            const videoThumbnail = video.contentImage?.thumbnailViewModel?.image
+                                ?.sources[video.contentImage?.thumbnailViewModel?.image?.sources.length - 1].url;
+                            const videoId = video.contentId;
                             const url = `https://www.youtube.com/watch?v=${videoId}`;
-                            const published = video.publishedTimeText?.simpleText || 'no info';
-                            const views = video.viewCountText?.simpleText || 'no info';
-                            const videolength = video.lengthText?.accessibility.accessibilityData.label;
+                            const published = video.metadata?.lockupMetadataViewModel?.metadata
+                                ?.contentMetadataViewModel?.metadataRows[0]?.metadataParts[1]?.text || 'Unknown publish time';
+                            const views = video.metadata?.lockupMetadataViewModel?.metadata
+                                ?.contentMetadataViewModel?.metadataRows[0]?.metadataParts[0]?.text || 'Unknown view count';
+                            const videolength = video.contentImage?.thumbnailViewModel?.overlays
+                                ?.find(overlay => overlay.thumbnailBottomOverlayViewModel)?.thumbnailBottomOverlayViewModel?.badges[0]
+                                ?.thumbnailBadgeViewModel?.rendererContext?.text || 'Unknown length';
 
                             LatestVideoList.push({ title, videoThumbnail, url, published, views, videolength });
                         });
